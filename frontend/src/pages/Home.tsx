@@ -68,8 +68,6 @@ const Home = () => {
      const {profiles} = useAppSelector(state => state.profiles);
      let navigate = useNavigate();
      let dispatch = useAppDispatch();
-     console.log(profiles)     
-
      const handleDelete = (id: String) => {
       if(window.confirm("Are you sure you wanted to delete this user?")){
         dispatch(deleteProfile(id))
@@ -81,15 +79,18 @@ const Home = () => {
   return (
     <div>
         <h2>Profile Page</h2>
+        <div style = {{padding: "10px"}}>
+          <Button variant = "contained" color = "primary" onClick = {() => navigate("/addUser")}>Add User</Button>
+        </div>
         <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
           <TableRow>
             <StyledTableCell align="center">Profile pic</StyledTableCell>
-            <StyledTableCell align="center">Name&nbsp;(g)</StyledTableCell>
-            <StyledTableCell align="center">Email&nbsp;(g)</StyledTableCell>
-            <StyledTableCell align="center">Phone&nbsp;(g)</StyledTableCell>
-            <StyledTableCell align="center">Action&nbsp;(g)</StyledTableCell>
+            <StyledTableCell align="center">Name&nbsp;</StyledTableCell>
+            <StyledTableCell align="center">Email&nbsp;</StyledTableCell>
+            <StyledTableCell align="center">Phone&nbsp;</StyledTableCell>
+            <StyledTableCell align="center">Action&nbsp;</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>

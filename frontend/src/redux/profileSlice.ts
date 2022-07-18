@@ -44,9 +44,9 @@ export const deleteProfile = createAsyncThunk(
  )
 
 //create profile
-export const createProfile = createAsyncThunk< Object, Profile>(
+export const createProfile = createAsyncThunk(
     "profiles/createProfile",
-    async (data, thunkAPI) => {
+    async (data: Object, thunkAPI) => {
         try{
             const response = await axios.post("http://localhost:8000/api/users/user", data);
             thunkAPI.dispatch(getProfiles());
@@ -90,6 +90,20 @@ export const profileSlice = createSlice({
             state.profiles = state.profiles!.filter((el) => el._id !== action.payload!);
         });
         builder.addCase(deleteProfile.rejected, (state, action) => {
+            state.loading = false;
+            state.errors = action.payload;
+        })
+
+        //create profile
+        builder.addCase(createProfile.pending, (state, _) => {
+            state.loading = true;
+            state.errors = null;
+        });
+        builder.addCase(createProfile.fulfilled, (state, action) => {
+            state.loading = false;  
+            state.profiles = [action.payload]
+        });
+        builder.addCase(createProfile.rejected, (state, action) => {
             state.loading = false;
             state.errors = action.payload;
         })
