@@ -8,11 +8,15 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { useAppSelector } from '../redux/store'
+import { useAppSelector, useAppDispatch } from '../redux/store'
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
 // import { makeStyles } from '@mui/material';
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import { deleteProfile } from '../redux/profileSlice';
 
-
+//Import from MUI
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: theme.palette.common.black,
@@ -63,7 +67,16 @@ const Home = () => {
     // const classes = useStyles();
      const {profiles} = useAppSelector(state => state.profiles);
      let navigate = useNavigate();
-     console.log(profiles)
+     let dispatch = useAppDispatch();
+     console.log(profiles)     
+
+     const handleDelete = (id: String) => {
+      if(window.confirm("Are you sure you wanted to delete this user?")){
+        dispatch(deleteProfile(id))
+          console.log(id)
+        
+      }
+    }
 
   return (
     <div>
@@ -80,15 +93,21 @@ const Home = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {profiles && profiles.map((profile, index) => (
-            <StyledTableRow key={index}>
+          {profiles && profiles.map((profile) => (
+            <StyledTableRow key={Number(profile._id)}>
               <StyledTableCell component="th" scope="row">
                 {/* {profile.profilePic} */}
               </StyledTableCell>
+              
               <StyledTableCell align="center">{profile.name}</StyledTableCell>
               <StyledTableCell align="center">{profile.email}</StyledTableCell>
               <StyledTableCell align="center">{profile.phone}</StyledTableCell>
-              <StyledTableCell align="center"></StyledTableCell>
+              <StyledTableCell align="center">
+                <ButtonGroup variant="contained" aria-label="outlined primary button group">
+                  <Button style = {{marginRight: "5px"}} color = "secondary" onClick = {() => handleDelete(profile._id)}>Delete</Button>
+                  <Button color = "primary">Edit</Button>              
+                </ButtonGroup>
+              </StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>
