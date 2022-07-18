@@ -1,10 +1,10 @@
 import { Schema, model } from "mongoose";
 
 export interface User {
-    profilePic: Buffer,
-    name: String,
-    email: String, 
-    phone: String,
+    profilePic: Buffer;
+    name: String;
+    email: String;
+    phone: String;
 }
 
 const UserSchema = new Schema<User>({
