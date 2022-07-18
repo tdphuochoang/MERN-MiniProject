@@ -4,6 +4,7 @@ import {Routes, Route} from "react-router-dom"
 import Home from './pages/Home';
 import { getProfiles } from './redux/profileSlice';
 import { useAppDispatch } from './redux/store';
+import AddUser from './pages/AddUser';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -19,9 +20,9 @@ function App() {
   return (
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/addUser" element={<AddUser />} />
       </Routes>
-
-    
+   
   );
 }
 
