@@ -21,3 +21,14 @@ export const createUser  =  async (req: Request, res: Response) => {
         return res.status(500).json({message: "Fail to create new user!"})
     }
 }
+
+//DELETE USER
+export const deleteUser  =  async (req: Request, res: Response) => {
+    
+    try{
+        const user = await User.findByIdAndDelete(req.params.id);
+        return res.status(200).json("User has been delete")
+    }catch(err){
+        return res.status(500).json({message: "Fail to delete user!"})
+    }
+}

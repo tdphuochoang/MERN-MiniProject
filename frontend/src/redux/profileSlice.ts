@@ -30,6 +30,19 @@ export const getProfiles = createAsyncThunk<Profile[]>(
    } 
 )
 
+//Delete profiles
+export const deleteProfile = createAsyncThunk(
+    "profiles/deleteProfile",
+    async (profileId: String, thunkAPI) => {
+     try{
+         const res = await axios.delete(`http://localhost:8000/api/users/user/${profileId}`);
+         return profileId;
+     }catch(err){
+         return thunkAPI.rejectWithValue(err);
+     }
+    } 
+ )
+
 //create profile
 export const createProfile = createAsyncThunk< Object, Profile>(
     "profiles/createProfile",
@@ -62,6 +75,21 @@ export const profileSlice = createSlice({
             state.loading = false;
         });
         builder.addCase(getProfiles.rejected, (state, action) => {
+            state.loading = false;
+            state.errors = action.payload;
+        })
+
+        //delete profile
+        builder.addCase(deleteProfile.pending, (state, _) => {
+            state.loading = true;
+            state.errors = null;
+        });
+        builder.addCase(deleteProfile.fulfilled, (state, action) => {
+            state.loading = false;
+            console.log(action.payload)
+            state.profiles = state.profiles!.filter((el) => el._id !== action.payload!);
+        });
+        builder.addCase(deleteProfile.rejected, (state, action) => {
             state.loading = false;
             state.errors = action.payload;
         })
