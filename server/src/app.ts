@@ -4,9 +4,11 @@ import "dotenv/config"
 import userRoute from "./routes/userRoute"
 
 const app:Application = express();
-app.use(express.json());
+
 
 //Middlewares
+app.use(express.json());
+app.use(cors())
 app.use("/api/users", userRoute)
 
 export {app}
