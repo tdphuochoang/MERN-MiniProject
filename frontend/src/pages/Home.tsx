@@ -13,7 +13,6 @@ import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 // import { makeStyles } from '@mui/material';
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from 'react-redux';
 import { deleteProfile } from '../redux/profileSlice';
 
 //Import from MUI
@@ -106,7 +105,7 @@ const Home = () => {
               <StyledTableCell align="center">
                 <ButtonGroup variant="contained" aria-label="outlined primary button group">
                   <Button style = {{marginRight: "5px"}} color = "secondary" onClick = {() => handleDelete(profile._id)}>Delete</Button>
-                  <Button color = "primary">Edit</Button>              
+                  <Button color = "primary" onClick = {() => navigate(`/editUser/${profile._id}`)}>Edit</Button>              
                 </ButtonGroup>
               </StyledTableCell>
             </StyledTableRow>
