@@ -13,7 +13,7 @@ import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 // import { makeStyles } from '@mui/material';
 import { useNavigate } from "react-router-dom";
-import { deleteProfile } from '../redux/profileSlice';
+import {clearProfiles, deleteProfile } from '../redux/profileSlice';
 
 //Import from MUI
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -75,11 +75,16 @@ const Home = () => {
       }
     }
 
+    const handleClear = () => {  
+      dispatch(clearProfiles())
+    }
+
   return (
     <div>
-        <h2>Profile Page</h2>
+        <h2>Profile Management System</h2>
         <div style = {{padding: "10px"}}>
-          <Button variant = "contained" color = "primary" onClick = {() => navigate("/addUser")}>Add User</Button>
+          <Button style = {{marginRight: "5px"}} variant = "contained" color = "primary" onClick = {() => navigate("/addUser")}>Add User</Button>
+          <Button variant = "contained" color = "warning" onClick = {handleClear}>Clear</Button>
         </div>
         <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
