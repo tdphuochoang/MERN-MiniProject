@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import { getProfiles } from './redux/profileSlice';
 import { useAppDispatch } from './redux/store';
 import AddUser from './pages/AddUser';
+import EditUser from './pages/EditUser';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -21,6 +22,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/addUser" element={<AddUser />} />
+        <Route path="/editUser/:id" element={<EditUser />} />
       </Routes>
    
   );

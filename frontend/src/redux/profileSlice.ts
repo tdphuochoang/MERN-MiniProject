@@ -30,6 +30,35 @@ export const getProfiles = createAsyncThunk<Profile[]>(
    } 
 )
 
+//Get single profile
+export const getSingleProfile = createAsyncThunk(
+    "profile/getSingleProfile",
+    async (profileId: String, thunkAPI) => {
+     try{
+         const res = await axios.get(`http://localhost:8000/api/users/user/${profileId}`);
+         return res.data;
+     }catch(err){
+         return thunkAPI.rejectWithValue(err);
+     }
+    } 
+ )
+
+ //Update profile
+ export const updateProfile = createAsyncThunk(
+    "profile/updateProfile",
+    async (body: any, thunkAPI) => {
+        const { id, ...userData} = body
+     try{
+         const res = await axios.put(`http://localhost:8000/api/users/user/${id}`, userData);
+         thunkAPI.dispatch(getProfiles());
+         return res.data;
+     }catch(err){
+         return thunkAPI.rejectWithValue(err);
+     }
+    } 
+ )
+
+
 //Delete profiles
 export const deleteProfile = createAsyncThunk(
     "profiles/deleteProfile",
@@ -107,6 +136,21 @@ export const profileSlice = createSlice({
             state.loading = false;
             state.errors = action.payload;
         })
+
+        //update profile
+        builder.addCase(updateProfile.pending, (state, _) => {
+            state.loading = true;
+            state.errors = null;
+        });
+        builder.addCase(updateProfile.fulfilled, (state, action) => {
+            state.loading = false;  
+            state.profiles = [action.payload]
+        });
+        builder.addCase(updateProfile.rejected, (state, action) => {
+            state.loading = false;
+            state.errors = action.payload;
+        })
+
      }  
 })
  

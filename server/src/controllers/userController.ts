@@ -11,6 +11,17 @@ export const getAllUsers  =  async (req: Request, res: Response) => {
     }
 }
 
+//GET A USER
+export const getUser =  async (req: Request, res: Response) => {
+    
+    try{
+        const user = await User.findById(req.params.id);
+        return res.status(200).json(user)
+    }catch(err){
+        return res.status(500).json({err: err})
+    }
+}
+
 //CREATE USER
 
 export const createUser  =  async (req: Request, res: Response) => {
@@ -20,6 +31,24 @@ export const createUser  =  async (req: Request, res: Response) => {
     }catch(err){
         return res.status(500).json({message: "Fail to create new user!"})
     }
+}
+
+//UPDATE USER
+
+export const editUser  =  async (req: Request, res: Response) => {
+
+    try {
+        const updatedUser = await User.findByIdAndUpdate(
+          req.params.id,
+          {
+            $set: req.body,
+          },
+          { new: true }
+        )
+        return res.status(201).json(updatedUser);
+      } catch (err) {
+        return res.status(500).json({message: "Fail to update user!"})
+      }
 }
 
 //DELETE USER
