@@ -30,6 +30,7 @@ export const getProfiles = createAsyncThunk<Profile[]>(
    } 
 )
 
+
 //Get single profile
 export const getSingleProfile = createAsyncThunk(
     "profile/getSingleProfile",
@@ -93,6 +94,9 @@ export const profileSlice = createSlice({
     reducers: {
         setProfiles: (state, action: PayloadAction<Profile[]>) => {
             state.profiles = action.payload
+        },
+        clearProfiles: (state) => {
+            state.profiles = [];
         }
     },
      extraReducers: (builder) => {
@@ -156,3 +160,4 @@ export const profileSlice = createSlice({
  
 export default profileSlice.reducer;
 export const {setProfiles} = profileSlice.actions;
+export const {clearProfiles} = profileSlice.actions;
