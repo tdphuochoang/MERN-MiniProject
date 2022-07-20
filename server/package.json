@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.1178.0",
     "brcypt": "^1.0.1",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",

@@ -8,13 +8,7 @@ import { useAppSelector, useAppDispatch } from '../redux/store'
 import { getSingleProfile, updateProfile } from "../redux/profileSlice";
 
 const EditUser = () => {
-    // const [state, setState] = useState({
-    //     profilePic: "",
-    //     name: "",
-    //     email: "",
-    //     phone: "", 
-    //   })
-      const [error, setError] = useState(""); 
+    const [error, setError] = useState(""); 
     let navigate = useNavigate();
     let dispatch = useAppDispatch();
     let params = useParams();
@@ -27,16 +21,6 @@ const EditUser = () => {
         email,
         phone
     })
-
-    // useEffect(() => {
-    //     dispatch(getSingleProfile(id))
-    //   }, [])
-
-    //   useEffect(() => {
-    //     if(singleProfile){
-    //         setState({...singleProfile})
-    //     }
-    //   }, [singleProfile])
 
       const handleInputChange = (e: any) => {
         let {name, value} = e.target;
