@@ -1,6 +1,5 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { styled} from '@mui/material/styles';
-// import { makeStyles } from '@mui/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
@@ -11,10 +10,12 @@ import Paper from '@mui/material/Paper';
 import { useAppSelector, useAppDispatch } from '../redux/store'
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
-// import { makeStyles } from '@mui/material';
 import { useNavigate } from "react-router-dom";
 import {clearProfiles, deleteProfile } from '../redux/profileSlice';
 import "./Home.css"
+import { IconButton, InputBase, TextField } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
+import { parseConfigFileTextToJson } from 'typescript';
 
 //Import from MUI
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -57,13 +58,14 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 const Home = () => {
      const {profiles} = useAppSelector(state => state.profiles);
+     const [searchTerm, setSearchTerm] = useState("");
+     const [searchResults, setSearchResults] = useState([]);
+     const [noData, setNoData] = useState("No data available")
      let navigate = useNavigate();
      let dispatch = useAppDispatch();
      const handleDelete = (id: String) => {
       if(window.confirm("Are you sure you wanted to delete this user?")){
-        dispatch(deleteProfile(id))
-          console.log(id)
-        
+        dispatch(deleteProfile(id))   
       }
     }
 
@@ -71,12 +73,42 @@ const Home = () => {
       dispatch(clearProfiles())
     }
 
+    const getSearchTerm = (e: React.ChangeEvent<HTMLInputElement>) => {
+      searchHandler(e.target.value)
+    }
+
+    const searchHandler =(searchTerm: any) => {
+       setSearchTerm(searchTerm)
+       if(searchTerm !== ""){
+        const newProfileList = profiles!.filter((profile) => {
+          return Object.values(profile).join(" ").toLowerCase().includes(searchTerm.toLowerCase());
+        })
+        setSearchResults(newProfileList as any);
+       }else{
+        setSearchResults(profiles as any)
+       }
+    }
+    console.log(searchResults)
+
   return (
     <div className = "homeContainer">
         <h2>Profile Management System</h2>
-        <div style = {{padding: "10px", marginBottom: "25px"}}>
+        <div style = {{padding: "10px", marginBottom: "25px", position: "relative"}}>
           <Button style = {{marginRight: "5px"}} variant = "contained" color = "primary" onClick = {() => navigate("/addUser")}>Add User</Button>
           <Button variant = "contained" color = "warning" onClick = {handleClear}>Clear</Button>
+          <div className = "searchBox">
+            <InputBase
+            sx={{ ml: 1, flex: 1 }}
+            placeholder="Search Profile"
+            inputProps={{ 'aria-label': 'search keyword' }}
+            value = {searchTerm}
+            onChange = {getSearchTerm}
+          />
+          <IconButton type="submit" sx={{ p: '10px' }} aria-label="search">
+            <SearchIcon />
+          </IconButton>
+          </div>
+          <br/>
         </div>
         <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -90,8 +122,9 @@ const Home = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {profiles && profiles.map((profile) => (
-            <StyledTableRow key={Number(profile._id)}>
+          {searchTerm.length !== 0 && searchResults.length === 0 && (<h1>No Data</h1>)}
+          {profiles && (searchTerm.length < 1 ? profiles : searchResults).map((profile) => (
+             <StyledTableRow key={Number(profile._id)}>
               <StyledTableCell align="center">
               <div className="img-holder">
                 <img src={profile.profilePic} alt="img" className="profile-img" />

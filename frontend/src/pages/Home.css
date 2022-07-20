@@ -13,3 +13,9 @@
     height: 100%;
     object-fit: cover;
 }
+
+.searchBox{
+    position: absolute;
+    right: 50px;
+    top: 0;   
+}
