@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -16,25 +16,22 @@ const AddUser = () => {
         email: "",
         phone: "",
       })
-      // const [file, setFile] = useState<File>();
-      // const [imgUrl, setImgUrl] = useState("");
-      const [error, setError] = useState(""); 
-        let navigate = useNavigate();
-        let dispatch = useAppDispatch();
-  const {profilePic, name, email, phone} = state;
+    const [error, setError] = useState("");
+    let navigate = useNavigate();
+    let dispatch = useAppDispatch();
+    const {profilePic, name, email, phone} = state;
 
   const handleInputChange = async (e: any) => {
     let {name, value} = e.target;
     setState({...state, [name]: value});  
   }
-  console.log(state)
+  
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     let {name} = e.target;
     const file = e.target.files![0]
     if(name === "profilePic"){     
-      const {url} = await fetch(s3Url).then(res => res.json())
-      console.log(url)
+      const {url} = await fetch(s3Url).then(res => res.json())   
       await fetch(url, {
         method: "PUT",
         headers: {
@@ -44,20 +41,26 @@ const AddUser = () => {
       })
       const imageURL1 = url.split("?")[0]
       setState({...state, [name]: imageURL1}) 
-    }  
-    
+    }   
   }
       const handleSubmit = (e: any) => {
-        e.preventDefault();   
+        e.preventDefault();
+        const emailRegex = /\S+@\S+\.\S+/;   
+        const phoneRegex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
         if(!name || !profilePic|| !email || !phone){
             setError("Please input all the input fields")
-        }else{
-            dispatch(createProfile(state));
-            navigate("/");
-            setError("");
         }
+        else if(!emailRegex.test(email)){
+          setError("Please input a valid email")
+        }
+        else if(!phoneRegex.test(phone)){
+          setError("Please input a valid US phone number")
+        }else{
+          dispatch(createProfile(state));
+          navigate("/");
+          setError("");
+        }       
       }
-
   return (
     <div className = "AddUserContainer">
         <Button style = {{width: "100px", marginTop: "20px"}} variant = "contained" color = "secondary" onClick = {() => navigate("/") }>Go back</Button>
@@ -74,11 +77,11 @@ const AddUser = () => {
       onSubmit = {handleSubmit}
         >
         <label id="profilePicLabel" htmlFor='profile-img'>Please choose your profile image:</label><br/>
-        <TextField id="profile-img" name = "profilePic" variant="standard" type = "file" onChange = {handleImageChange}/>
+        <TextField id="profile-img" name = "profilePic" variant="standard" type = "file" inputProps={{ accept: 'image/*' }} onChange = {handleImageChange}/>
         <br/>
         <TextField id="standard-basic" label="Name" name = "name" variant="standard" value = {name} type = "text" onChange = {handleInputChange}/>
         <br/>
-        <TextField id="standard-basic" label="Email" name = "email" variant="standard" value = {email} type = "text" onChange = {handleInputChange}/>
+        <TextField id="standard-basic" label="Email" name = "email" variant="standard" value = {email} type = "email" onChange = {handleInputChange}/>
         <br/>
         <TextField id="standard-basic" label="Phone" name = "phone" variant="standard" value = {phone} type = "text" onChange = {handleInputChange} />
         <br/>         

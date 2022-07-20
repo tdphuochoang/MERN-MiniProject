@@ -72,9 +72,9 @@ const Home = () => {
     }
 
   return (
-    <div>
+    <div className = "homeContainer">
         <h2>Profile Management System</h2>
-        <div style = {{padding: "10px"}}>
+        <div style = {{padding: "10px", marginBottom: "25px"}}>
           <Button style = {{marginRight: "5px"}} variant = "contained" color = "primary" onClick = {() => navigate("/addUser")}>Add User</Button>
           <Button variant = "contained" color = "warning" onClick = {handleClear}>Clear</Button>
         </div>
@@ -82,7 +82,7 @@ const Home = () => {
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
           <TableRow>
-            <StyledTableCell align="center">Profile pic</StyledTableCell>
+            <StyledTableCell align="center">Profile picture</StyledTableCell>
             <StyledTableCell align="center">Name&nbsp;</StyledTableCell>
             <StyledTableCell align="center">Email&nbsp;</StyledTableCell>
             <StyledTableCell align="center">Phone&nbsp;</StyledTableCell>

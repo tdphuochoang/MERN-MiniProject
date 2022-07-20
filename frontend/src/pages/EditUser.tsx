@@ -1,11 +1,11 @@
 import "./EditUser.css"
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from '../redux/store'
-import { getSingleProfile, updateProfile } from "../redux/profileSlice";
+import {updateProfile } from "../redux/profileSlice";
 
 const EditUser = () => {
     const [error, setError] = useState(""); 
@@ -19,7 +19,7 @@ const EditUser = () => {
         profilePic,
         name,
         email,
-        phone
+        phone,
     })
 
       const handleInputChange = (e: any) => {
@@ -29,21 +29,30 @@ const EditUser = () => {
 
       const handleSubmit = (e: any) => {
         e.preventDefault(); 
-        setValues({profilePic: '', name: '', email: '', phone: ''})
-        dispatch(updateProfile({
+        const emailRegex = /\S+@\S+\.\S+/;   
+        const phoneRegex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+        if(!values.name || !values.email || !values.phone){
+          setError("Please input all the input fields")
+        } else if(!emailRegex.test(values.email as string)){
+          setError("Please input a valid email")
+        }else if(!phoneRegex.test(values.phone as string)){
+          setError("Please input a valid phone number")
+        }else{
+          setValues({profilePic: '', name: '', email: '', phone: ''})
+          dispatch(updateProfile({
             id: params.id,
             profilePic: values.profilePic,
             name: values.name,
             email: values.email,
             phone: values.phone
         }));
-        navigate("/");
-        setError("");
-        
+          navigate("/");
+          setError("");
+        }            
       }
     
   return (
-    <div>
+    <div className = "EditUserContainer">
         <Button style = {{width: "100px", marginTop: "20px"}} variant = "contained" color = "secondary" onClick = {() => navigate("/") }>Go back</Button>
         <h2>Edit User</h2>
         {error && <h3 style = {{color: "red"}}>{error}</h3>}
@@ -54,10 +63,10 @@ const EditUser = () => {
       }}
       noValidate
       autoComplete="off"
-      style = {{marginTop: "100px"}}
       onSubmit = {handleSubmit}
         >
-        <TextField id="standard-basic" label="ProfilePic" name = "profilePic" variant="standard" value = {values.profilePic || ""} type = "text" onChange = {handleInputChange}/>
+        <TextField id="standard-basic" label="ProfilePic" name = "profilePic" variant="standard" value = {values.profilePic || ""} inputProps={
+					{ readOnly: true, }} type = "text" onChange = {handleInputChange}/>
         <br/>
         <TextField id="standard-basic" label="Name" name = "name" variant="standard" value = {values.name || ""} type = "text" onChange = {handleInputChange}/>
         <br/>
