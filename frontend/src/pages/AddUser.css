@@ -5,3 +5,17 @@
     align-items: center;
     text-align: center;
 }
+
+#profilePicLabel{
+    display: block;
+    color: #666666;
+    text-align: left; 
+    padding-left: 20px;
+    font-size: 17px;
+    font-weight: 400;
+    margin-top: 30px;
+}
+
+#profile-img{
+    margin-bottom: 50px;
+}

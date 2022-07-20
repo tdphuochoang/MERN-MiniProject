@@ -7,6 +7,8 @@ import { useAppDispatch } from '../redux/store';
 import "./AddUser.css"
 import { createProfile } from '../redux/profileSlice';
 
+const s3Url = "http://localhost:8000/s3Url"
+
 const AddUser = () => {
     const [state, setState] = useState({
         profilePic: "",
@@ -14,19 +16,39 @@ const AddUser = () => {
         email: "",
         phone: "",
       })
-
+      // const [file, setFile] = useState<File>();
+      // const [imgUrl, setImgUrl] = useState("");
       const [error, setError] = useState(""); 
         let navigate = useNavigate();
         let dispatch = useAppDispatch();
   const {profilePic, name, email, phone} = state;
 
-  const handleInputChange = (e: any) => {
+  const handleInputChange = async (e: any) => {
     let {name, value} = e.target;
-    setState({...state, [name]: value});
+    setState({...state, [name]: value});  
   }
+  console.log(state)
 
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    let {name} = e.target;
+    const file = e.target.files![0]
+    if(name === "profilePic"){     
+      const {url} = await fetch(s3Url).then(res => res.json())
+      console.log(url)
+      await fetch(url, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "image/jpeg"
+        },
+        body: file
+      })
+      const imageURL1 = url.split("?")[0]
+      setState({...state, [name]: imageURL1}) 
+    }  
+    
+  }
       const handleSubmit = (e: any) => {
-        e.preventDefault();
+        e.preventDefault();   
         if(!name || !profilePic|| !email || !phone){
             setError("Please input all the input fields")
         }else{
@@ -51,7 +73,8 @@ const AddUser = () => {
       
       onSubmit = {handleSubmit}
         >
-        <TextField id="standard-basic" label="ProfilePic" name = "profilePic" variant="standard" value = {profilePic} type = "text" onChange = {handleInputChange}/>
+        <label id="profilePicLabel" htmlFor='profile-img'>Please choose your profile image:</label><br/>
+        <TextField id="profile-img" name = "profilePic" variant="standard" type = "file" onChange = {handleImageChange}/>
         <br/>
         <TextField id="standard-basic" label="Name" name = "name" variant="standard" value = {name} type = "text" onChange = {handleInputChange}/>
         <br/>

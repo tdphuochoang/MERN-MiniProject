@@ -14,6 +14,7 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 // import { makeStyles } from '@mui/material';
 import { useNavigate } from "react-router-dom";
 import {clearProfiles, deleteProfile } from '../redux/profileSlice';
+import "./Home.css"
 
 //Import from MUI
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -54,16 +55,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     createData('Gingerbread', 356, 16.0, 49, 3.9),
   ];
 
-//   const useStyles = makeStyles({
-//     table: {
-//       marginTop: 100,
-//       minWidth: 700,
-//     }
-//   })
-
-
 const Home = () => {
-    // const classes = useStyles();
      const {profiles} = useAppSelector(state => state.profiles);
      let navigate = useNavigate();
      let dispatch = useAppDispatch();
@@ -100,10 +92,11 @@ const Home = () => {
         <TableBody>
           {profiles && profiles.map((profile) => (
             <StyledTableRow key={Number(profile._id)}>
-              <StyledTableCell component="th" scope="row">
-                {/* {profile.profilePic} */}
+              <StyledTableCell align="center">
+              <div className="img-holder">
+                <img src={profile.profilePic} alt="img" className="profile-img" />
+              </div>
               </StyledTableCell>
-              
               <StyledTableCell align="center">{profile.name}</StyledTableCell>
               <StyledTableCell align="center">{profile.email}</StyledTableCell>
               <StyledTableCell align="center">{profile.phone}</StyledTableCell>
